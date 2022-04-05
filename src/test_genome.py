@@ -1,16 +1,21 @@
+"""Testing genome implementations."""
+
+
 # This directory will be checked with pytest. It will examine
 # all files that start with test_*.py and run all functions with
 # names that start with test_
 
 from genome import (
     Genome,
-    ListGenome
+    ListGenome,
+    LinkedListGenome
 )
+from typing import Type
 
 
-def run_genome_test(G: Genome) -> None:
+def run_genome_test(genome_class: Type[Genome]) -> None:
     """Test a Genome implementation."""
-    genome = G(20)
+    genome = genome_class(20)
     assert str(genome) == "--------------------"
     assert genome.active_tes() == []
 
@@ -27,23 +32,30 @@ def run_genome_test(G: Genome) -> None:
     assert str(genome) == "-----xxxxxAAAAAAAAAAxxxxx-----AAAAAAAAAA----------"
     assert genome.active_tes() == [2, 3]
 
-    # Make TE 3 15 to the right of the start of 2
+    # Make TE 4 15 to the leftt of the start of 2
     assert 4 == genome.copy_te(2, -15)
     assert str(genome) \
         == "-----xxxxxAAAAAAAAAAxxxxx-----AAAAAAAAAA-----AAAAAAAAAA-----"
     assert genome.active_tes() == [2, 3, 4]
 
     assert 5 == genome.insert_te(50, 10)
-    assert str(genome) \
-        == "-----xxxxxAAAAAAAAAAxxxxx-----AAAAAAAAAA-----xxxxxAAAAAAAAAAxxxxx-----"
+    assert str(genome) == \
+        "-----xxxxxAAAAAAAAAAxxxxx-----" + \
+        "AAAAAAAAAA-----xxxxxAAAAAAAAAAxxxxx-----"
     assert genome.active_tes() == [2, 3, 5]
 
     genome.disable_te(3)
-    assert str(genome) \
-        == "-----xxxxxAAAAAAAAAAxxxxx-----xxxxxxxxxx-----xxxxxAAAAAAAAAAxxxxx-----"
+    assert str(genome) == \
+        "-----xxxxxAAAAAAAAAAxxxxx-----" \
+        "xxxxxxxxxx-----xxxxxAAAAAAAAAAxxxxx-----"
     assert genome.active_tes() == [2, 5]
 
 
 def test_list_genome() -> None:
     """Test that the Python list implementation works."""
     run_genome_test(ListGenome)
+
+
+def test_linked_list_genome() -> None:
+    """Test that the linked list implementation works."""
+    run_genome_test(LinkedListGenome)
