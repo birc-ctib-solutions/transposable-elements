@@ -8,3 +8,6 @@
 
 # Module useful for testing
 pytest
+
+# Used for sampling
+numpy

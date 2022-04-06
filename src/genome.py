@@ -67,6 +67,11 @@ class Genome(ABC):
         ...  # not implemented yet
 
     @abstractmethod
+    def __len__(self) -> int:
+        """Get the current length of the genome."""
+        ...  # not implemented yet
+
+    @abstractmethod
     def __str__(self) -> str:
         """
         Return a string representation of the genome.
@@ -162,6 +167,10 @@ class ListGenome(Genome):
     def active_tes(self) -> list[int]:
         """Get the active TE IDs."""
         return [te for te in self.active]
+
+    def __len__(self) -> int:
+        """Current length of the genome."""
+        return len(self.nuc)
 
     def __str__(self) -> str:
         """
@@ -311,6 +320,10 @@ class LinkedListGenome(Genome):
     def active_tes(self) -> list[int]:
         """Get the active TE IDs."""
         return [te for te in self.active]
+
+    def __len__(self) -> int:
+        """Current length of the genome."""
+        return len(self.nuc)
 
     @property
     def _nucleotides(self) -> Iterable[int]:
