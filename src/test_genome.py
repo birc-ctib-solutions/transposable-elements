@@ -59,3 +59,8 @@ def test_list_genome() -> None:
 def test_linked_list_genome() -> None:
     """Test that the linked list implementation works."""
     run_genome_test(LinkedListGenome)
+
+
+def test_test() -> None:
+    """Fail on purpose."""
+    assert False
