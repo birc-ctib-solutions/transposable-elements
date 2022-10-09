@@ -303,6 +303,10 @@ class LinkedListGenome(Genome):
             yield self.nuc[n]
             n = self.next[n]
 
+    def __len__(self) -> int:
+        """Return length of genome."""
+        return len(self.nuc)
+
     def __str__(self) -> str:
         """
         Return a string representation of the genome.
