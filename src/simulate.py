@@ -44,8 +44,7 @@ def sim_te(n: int, k: int,
            genome_class: Type[Genome] = ListGenome) -> str:
     """Simulate a genome of initial size n for k operations.
 
-    >>> sim_te(30, 10, seed = 1984,
-    ...        theta = sim_params(te_len=10))
+    >>> sim_te(30, 10, seed = 1984, theta = SimParams(te_len=10))
     '---AAAA------------x--xAAAAxxx------AAAA-xxxxAAAA------'
     """
     rand.seed(seed)
