@@ -89,12 +89,13 @@ class Genome(ABC):
 class ListGenome(Genome):
     """
     Representation of a genome.
+
     Implements the Genome interface using Python's built-in lists
     """
 
     next_te_id: int                  # For assigning IDs to TEs.
     nuc: list[int]                   # The genome (as a linear list).
-    active: dict[int, int]            # map from active IDs to their length
+    active: dict[int, int]           # map from active IDs to their length
 
     def __init__(self, n: int):
         """Create a new genome with length n."""
@@ -105,6 +106,7 @@ class ListGenome(Genome):
     def insert_te(self, pos: int, length: int) -> int:
         """
         Insert a new transposable element.
+
         Insert a new transposable element at position pos and len
         nucleotide forward.
         If the TE collides with an existing TE, i.e. genome[pos]
@@ -128,6 +130,7 @@ class ListGenome(Genome):
     def copy_te(self, te: int, offset: int) -> int | None:
         """
         Copy a transposable element.
+
         Copy the transposable element te to an offset from its current
         location.
         The offset can be positive or negative; if positive the te is copied
@@ -148,6 +151,7 @@ class ListGenome(Genome):
     def disable_te(self, te: int) -> None:
         """
         Disable a TE.
+
         If te is an active TE, then make it inactive. Inactive
         TEs are already inactive, so there is no need to do anything
         for those.
@@ -157,11 +161,16 @@ class ListGenome(Genome):
 
     def active_tes(self) -> list[int]:
         """Get the active TE IDs."""
-        return [te for te in self.active]
+        return list(self.active)
+
+    def __len__(self) -> int:
+        """Return length of genome."""
+        return len(self.nuc)
 
     def __str__(self) -> str:
         """
         Return a string representation of the genome.
+
         Create a string that represents the genome. By nature, it will be
         linear, but imagine that the last character is immidiatetly followed
         by the first.
@@ -180,6 +189,7 @@ class ListGenome(Genome):
 class LinkedListGenome(Genome):
     """
     Representation of a genome.
+
     Implements the Genome interface using linked lists.
     """
 
@@ -201,6 +211,7 @@ class LinkedListGenome(Genome):
     def _get_index(self, pos: int) -> int:
         """
         Get the index in the list-arrays that corresponds to position.
+
         Since we use linked lists, we cannot index directly, but must
         search though the list from the beginning.
         """
@@ -212,6 +223,7 @@ class LinkedListGenome(Genome):
     def _insert_te_at_index(self, i: int, length: int) -> int:
         """
         Insert a new transposable element.
+
         Insert a new transposable element at the link at index i in
         the arrays.
         If the TE collides with an existing TE, i.e. genome[pos]
@@ -241,6 +253,7 @@ class LinkedListGenome(Genome):
     def insert_te(self, pos: int, length: int) -> int:
         """
         Insert a new transposable element.
+
         Insert a new transposable element at position pos and len
         nucleotide forward.
         If the TE collides with an existing TE, i.e. genome[pos]
@@ -264,6 +277,7 @@ class LinkedListGenome(Genome):
     def copy_te(self, te: int, offset: int) -> int | None:
         """
         Copy a transposable element.
+
         Copy the transposable element te to an offset from its current
         location.
         The offset can be positive or negative; if positive the te is copied
@@ -283,6 +297,7 @@ class LinkedListGenome(Genome):
     def disable_te(self, te: int) -> None:
         """
         Disable a TE.
+
         If te is an active TE, then make it inactive. Inactive
         TEs are already inactive, so there is no need to do anything
         for those.
@@ -292,7 +307,7 @@ class LinkedListGenome(Genome):
 
     def active_tes(self) -> list[int]:
         """Get the active TE IDs."""
-        return [te for te in self.active]
+        return list(self.active)
 
     @property
     def _nucleotides(self) -> Iterable[int]:
@@ -310,6 +325,7 @@ class LinkedListGenome(Genome):
     def __str__(self) -> str:
         """
         Return a string representation of the genome.
+
         Create a string that represents the genome. By nature, it will be
         linear, but imagine that the last character is immidiatetly followed
         by the first.

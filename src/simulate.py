@@ -48,7 +48,7 @@ def sim_te(n: int, k: int,
     '---AAAA------------x--xAAAAxxx------AAAA-xxxxAAAA------'
     """
     rand.seed(seed)
-    np.random.seed(seed)
+    np.random.seed(seed if seed is not None else rand.randint(0, 10_000))
 
     genome = genome_class(n)
     for _ in range(k):
