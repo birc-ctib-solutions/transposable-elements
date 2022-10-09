@@ -10,25 +10,18 @@ from genome import (
     ListGenome,
     LinkedListGenome
 )
+from dataclasses import dataclass
 
-SIM_PARAMS = dict[str, object]
 
+@dataclass
+class SimParams:
+    """Holds simulation parameters."""
 
-def sim_params(*,  # the args below must be given by keyword
+    te_len: int = 200       # mean te length
+    te_offset: int = 500    # mean te move
 
-               te_len: int = 200,       # mean te length
-               te_offset: int = 500,    # mean te move
-
-               # weight between insert,copy,disable
-               weights: list[float] = (0.1, 2.0, 1.0)
-
-               ) -> SIM_PARAMS:
-    """Construct parameters for a simulation."""
-    return {
-        'te_len': te_len,
-        'te_offset': te_offset,
-        'weights': weights
-    }
+    # weight between insert,copy,disable
+    weights: tuple[float, float, float] = (0.1, 2.0, 1.0)
 
 
 class Ops(Enum):
@@ -39,14 +32,14 @@ class Ops(Enum):
     DISABLE = 3
 
     @staticmethod
-    def sample(weights: list[int]) -> Ops:
+    def sample(weights: tuple[float, float, float]) -> Ops:
         """Select which operation to do."""
         return rand.choices(list(Ops), weights)[0]
 
 
 def sim_te(n: int, k: int,
-           *,  # the args below must be given by keyword
-           theta: SIM_PARAMS = sim_params(),
+           *,  # the remaining args below must be given by keyword
+           theta: SimParams = SimParams(),
            seed: int | None = None,
            genome_class: Type[Genome] = ListGenome) -> str:
     """Simulate a genome of initial size n for k operations.
@@ -61,21 +54,20 @@ def sim_te(n: int, k: int,
     genome = genome_class(n)
     for _ in range(k):
         active = genome.active_tes()
+        theta_ins, theta_cpy, theta_dis = theta.weights
         # weigh the operations with the number of active TEs
-        op_weights = [
-            theta['weights'][0],
-            len(active) * theta['weights'][1],
-            len(active) * theta['weights'][2],
-        ]
+        op_weights = (theta_ins,
+                      len(active) * theta_cpy,
+                      len(active) * theta_dis)
         match Ops.sample(op_weights):
             case Ops.INSERT:
                 pos = rand.randint(0, len(genome))
-                length = np.random.geometric(1/theta['te_len'])
+                length = np.random.geometric(1/theta.te_len)
                 genome.insert_te(pos, length)
 
             case Ops.COPY:
                 te = rand.choice(active)
-                offset = np.random.geometric(1/theta['te_offset'])
+                offset = np.random.geometric(1/theta.te_offset)
                 if rand.random() < 0.5:
                     offset = -offset
                 genome.copy_te(te, offset)

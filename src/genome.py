@@ -7,8 +7,6 @@ from abc import (
     abstractmethod
 )
 
-from typing import Iterable
-
 
 class Genome(ABC):
     """Representation of a circular enome."""
@@ -129,7 +127,6 @@ class ListGenome(Genome):
         If te is not active, return None (and do not copy it).
         """
         ...  # FIXME
-        return None
 
     def disable_te(self, te: int) -> None:
         """
@@ -208,7 +205,6 @@ class LinkedListGenome(Genome):
         If te is not active, return None (and do not copy it).
         """
         ...  # FIXME
-        return None
 
     def disable_te(self, te: int) -> None:
         """
